@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
 
 import Navbar from "./components/Navbar";
 import CursorGlow from "./components/CursorGlow";
@@ -13,8 +14,29 @@ import Contact from "./pages/Contact";
 function AnimatedRoutes() {
   const location = useLocation();
 
+  useEffect(() => {
+    const titles = {
+      "/": "Siddharth – Full Stack Developer",
+      "/about": "About – Siddharth",
+      "/skills": "Skills – Siddharth",
+      "/projects": "Projects – Siddharth",
+      "/contact": "Contact – Siddharth",
+    };
+
+    document.title = titles[location.pathname] || "Siddharth";
+  }, [location.pathname]);
+
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence
+      mode="wait"
+      onExitComplete={() => {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "instant",
+        });
+      }}
+    >
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />

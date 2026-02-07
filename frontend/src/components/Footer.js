@@ -11,7 +11,6 @@ function Footer() {
           <p>© 2026 Siddharth. Built with React, Tailwind CSS & Framer Motion</p>
         </div>
 
-        {/* Right: ICON LINKS */}
         <div className="flex gap-5 text-muted">
           <a
             href="https://github.com/siddharthriot/"

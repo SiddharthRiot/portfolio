@@ -11,7 +11,6 @@ function Contact() {
   });
 
   const [status, setStatus] = useState("idle");
-  // idle | sending | success | error
 
   function handleChange(e) {
     setForm({
@@ -126,7 +125,7 @@ function Contact() {
               disabled={status === "sending"}
             />
 
-            {/* BUTTON */}
+            {/* btn */}
             <AnimatePresence>
               {status !== "success" && (
                 <motion.button

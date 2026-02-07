@@ -1,13 +1,93 @@
-import { motion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+} from "framer-motion";
 import Layout from "../components/Layout";
 import PageWrapper from "../components/PageWrapper";
 import profile from "../assets/profile.jpg";
 
+function FocusCard({ title, desc }) {
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+  const scale = useMotionValue(1);
+
+  const smoothRotateX = useSpring(rotateX, { stiffness: 160, damping: 20 });
+  const smoothRotateY = useSpring(rotateY, { stiffness: 160, damping: 20 });
+  const smoothScale = useSpring(scale, { stiffness: 160, damping: 20 });
+
+  function handleMouseMove(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    rotateX.set(-(y - centerY) / 75);
+    rotateY.set((x - centerX) / 75);
+    scale.set(0.99);
+  }
+
+  function handleMouseLeave() {
+    rotateX.set(0);
+    rotateY.set(0);
+    scale.set(1);
+  }
+
+  return (
+    <motion.div
+      className="border border-white/5 rounded-xl p-6 select-none cursor-default"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX: smoothRotateX,
+        rotateY: smoothRotateY,
+        scale: smoothScale,
+        transformPerspective: 900,
+      }}
+    >
+      <h3 className="font-semibold mb-3">{title}</h3>
+      <p className="text-muted font-body leading-[1.75]">
+        {desc}
+      </p>
+    </motion.div>
+  );
+}
+
 function Home() {
+
+  const imgRotateX = useMotionValue(0);
+  const imgRotateY = useMotionValue(0);
+  const imgScale = useMotionValue(1);
+
+  const smoothImgRotateX = useSpring(imgRotateX, { stiffness: 120, damping: 20 });
+  const smoothImgRotateY = useSpring(imgRotateY, { stiffness: 120, damping: 20 });
+  const smoothImgScale = useSpring(imgScale, { stiffness: 120, damping: 20 });
+
+  function handleImageMouseMove(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    imgRotateX.set(-(y - centerY) / 40);
+    imgRotateY.set((x - centerX) / 40);
+    imgScale.set(1.03);
+  }
+
+  function handleImageMouseLeave() {
+    imgRotateX.set(0);
+    imgRotateY.set(0);
+    imgScale.set(1);
+  }
+
   return (
     <PageWrapper>
       <Layout>
-        {/* HERO SECTION */}
+        {/* hero */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
 
           {/* LEFT: TEXT */}
@@ -28,22 +108,64 @@ function Home() {
               breaking in production.
             </p>
 
-            <div className="mt-10 flex gap-6 font-body">
+            {/* cta */}
+            <div className="mt-10 flex gap-6 font-body items-center">
+
               <a
                 href="/projects"
-                className="inline-flex items-center gap-2 bg-accent text-black px-6 py-3 rounded-md font-medium hover:opacity-90 transition cursor-pointer"
+                className="
+                  group relative inline-flex items-center gap-2
+                  px-6 py-3 rounded-md
+                  bg-accent text-black font-medium
+                  transition
+                "
               >
-                View Projects →
+                <span
+                  className="
+                    absolute inset-[2px]
+                    rounded-[4px]
+                    border border-black/20
+                    opacity-0
+                    transition-opacity duration-300
+                    group-hover:opacity-100
+                  "
+                />
+                <span className="relative z-10">
+                  View Projects
+                </span>
+                <span
+                  className="
+                    relative z-10
+                    transition-transform duration-300
+                    group-hover:rotate-12
+                  "
+                >
+                  →
+                </span>
               </a>
+
+              {/* Contact */}
               <a
                 href="/contact"
-                className="inline-flex items-center gap-2 text-text hover:text-accent transition cursor-pointer"
+                className="
+                  group relative text-text
+                  hover:text-accent transition-colors duration-300
+                "
               >
                 Contact
+                <span
+                  className="
+                    absolute left-1/2 -bottom-1
+                    h-[1.5px] w-0
+                    bg-accent
+                    transition-all duration-300
+                    group-hover:w-full
+                    group-hover:left-0
+                  "
+                />
               </a>
             </div>
 
-            {/* QUICK STATS */}
             <div className="mt-12 grid grid-cols-3 gap-6 text-sm font-body text-muted max-w-md select-none cursor-default">
               <div>
                 <p className="text-text font-semibold text-lg">4+</p>
@@ -60,23 +182,32 @@ function Home() {
             </div>
           </motion.section>
 
-          {/* RIGHT: IMAGE */}
           <motion.div
             className="relative flex justify-center md:justify-end select-none"
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
+
+            onMouseMove={handleImageMouseMove}
+            onMouseLeave={handleImageMouseLeave}
+            style={{
+              rotateX: smoothImgRotateX,
+              rotateY: smoothImgRotateY,
+              scale: smoothImgScale,
+              transformPerspective: 1000,
+            }}
           >
             <div className="absolute inset-0 rounded-3xl bg-accent/10 blur-3xl -z-10" />
             <img
               src={profile}
               alt="Siddharth"
               className="w-72 md:w-80 rounded-2xl shadow-xl"
+              draggable="false"
+              onDragStart={(e) => e.preventDefault()}
             />
           </motion.div>
         </div>
 
-        {/* THINKING / PHILOSOPHY SECTION */}
         <motion.section
           className="max-w-4xl mx-auto mt-28 select-none cursor-default"
           initial={{ opacity: 0, y: 30 }}
@@ -90,13 +221,10 @@ function Home() {
 
           <p className="text-muted font-body leading-[1.8]">
             I believe good software is boring in the best way — predictable,
-            resilient, and easy to reason about. I prioritize correctness,
-            clean abstractions, and systems that scale without constant
-            firefighting.
+            resilient, and easy to reason about.
           </p>
         </motion.section>
 
-        {/* FOCUS SECTION */}
         <motion.section
           className="max-w-4xl mx-auto mt-28"
           initial={{ opacity: 0, y: 30 }}
@@ -109,39 +237,21 @@ function Home() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                title: "Systems",
-                desc:
-                  "Designing APIs, authentication flows, and backend logic that behave correctly under real-world constraints.",
-              },
-              {
-                title: "Scalability",
-                desc:
-                  "Writing maintainable code with clean architecture and long-term growth in mind.",
-              },
-              {
-                title: "AI / ML",
-                desc:
-                  "Applying machine learning to real problems, not demo-only notebooks.",
-              },
-            ].map((item) => (
-              <motion.div
-                key={item.title}
-                className="border border-white/5 rounded-xl p-6 select-none cursor-default"
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-              >
-                <h3 className="font-semibold mb-3">{item.title}</h3>
-                <p className="text-muted font-body leading-[1.75]">
-                  {item.desc}
-                </p>
-              </motion.div>
-            ))}
+            <FocusCard
+              title="Systems"
+              desc="Designing APIs, authentication flows, and backend logic that behave correctly under real-world constraints."
+            />
+            <FocusCard
+              title="Scalability"
+              desc="Writing maintainable code with clean architecture and long-term growth in mind."
+            />
+            <FocusCard
+              title="AI / ML"
+              desc="Applying machine learning to real problems, not demo-only notebooks."
+            />
           </div>
         </motion.section>
 
-        {/* FEATURED PROJECTS TEASER */}
         <motion.section
           className="max-w-4xl mx-auto mt-28 text-center select-none cursor-default"
           initial={{ opacity: 0, y: 30 }}

@@ -6,7 +6,7 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// 🔹 ENV CHECK (prevents silent crashes)
+// .env check
 if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
   console.error("❌ MAIL_USER or MAIL_PASS missing in .env");
 }
@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
   res.send("Backend running");
 });
 
-// 🔹 MAIL TRANSPORTER (with verification)
+// mail transporter with verification
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -29,7 +29,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// 🔹 Verify transporter once at startup
+// verify transporter once at startup
 transporter.verify((error, success) => {
   if (error) {
     console.error("❌ Mail transporter error:", error);

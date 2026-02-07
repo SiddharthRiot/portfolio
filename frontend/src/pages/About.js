@@ -1,6 +1,59 @@
-import { motion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+} from "framer-motion";
 import Layout from "../components/Layout";
 import PageWrapper from "../components/PageWrapper";
+
+/* 🔹 Highlight Card (ONLY new component) */
+function HighlightCard({ title, desc }) {
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+  const scale = useMotionValue(1);
+
+  const smoothRotateX = useSpring(rotateX, { stiffness: 160, damping: 20 });
+  const smoothRotateY = useSpring(rotateY, { stiffness: 160, damping: 20 });
+  const smoothScale = useSpring(scale, { stiffness: 160, damping: 20 });
+
+  function handleMouseMove(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    rotateX.set(-(y - centerY) / 70);
+    rotateY.set((x - centerX) / 70);
+    scale.set(0.99);
+  }
+
+  function handleMouseLeave() {
+    rotateX.set(0);
+    rotateY.set(0);
+    scale.set(1);
+  }
+
+  return (
+    <motion.div
+      className="border border-white/5 rounded-xl p-6 bg-bg select-none cursor-default"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX: smoothRotateX,
+        rotateY: smoothRotateY,
+        scale: smoothScale,
+        transformPerspective: 900,
+      }}
+    >
+      <h3 className="font-semibold mb-3">{title}</h3>
+      <p className="text-muted font-body leading-[1.7]">
+        {desc}
+      </p>
+    </motion.div>
+  );
+}
 
 function About() {
   return (
@@ -17,7 +70,6 @@ function About() {
             About
           </h1>
 
-          {/* MAIN INTRO */}
           <p className="text-muted font-body leading-[1.8] mb-8 max-w-3xl">
             I’m a Computer Science undergraduate focused on building clean,
             secure, and scalable digital systems. I enjoy working on
@@ -35,37 +87,21 @@ function About() {
             conditions.
           </p>
 
-          {/* HIGHLIGHT CARDS */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            {[
-              [
-                "Systems-first",
-                "I think in flows, contracts, and failure cases rather than just screens.",
-              ],
-              [
-                "Maintainability",
-                "I prioritize readable, boring code that others can understand.",
-              ],
-              [
-                "Real-world focus",
-                "I design for production constraints, not ideal scenarios.",
-              ],
-            ].map(([title, desc]) => (
-              <motion.div
-                key={title}
-                className="border border-white/5 rounded-xl p-6 bg-bg select-none cursor-default"
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-              >
-                <h3 className="font-semibold mb-3">{title}</h3>
-                <p className="text-muted font-body leading-[1.7]">
-                  {desc}
-                </p>
-              </motion.div>
-            ))}
+            <HighlightCard
+              title="Systems-first"
+              desc="I think in flows, contracts, and failure cases rather than just screens."
+            />
+            <HighlightCard
+              title="Maintainability"
+              desc="I prioritize readable, boring code that others can understand."
+            />
+            <HighlightCard
+              title="Real-world focus"
+              desc="I design for production constraints, not ideal scenarios."
+            />
           </div>
 
-          {/* TECH STACK — ONLY THIS HAS HOVER */}
           <div className="mb-16">
             <p className="text-sm uppercase tracking-wider text-muted mb-4">
               Tech I work with
@@ -98,7 +134,6 @@ function About() {
             </div>
           </div>
 
-          {/* CURRENT FOCUS */}
           <div className="border border-white/5 rounded-xl p-6 mb-16 select-none cursor-default">
             <h3 className="font-semibold mb-3">Current focus</h3>
             <p className="text-muted font-body leading-[1.75]">
@@ -108,13 +143,10 @@ function About() {
               </span>
               , with a specific interest in deep learning models such as{" "}
               <span className="text-text">CNNs</span> and{" "}
-              <span className="text-text">RNNs</span>. My goal is to apply these
-              techniques responsibly to practical, real-world problems rather
-              than theoretical demos.
+              <span className="text-text">RNNs</span>.
             </p>
           </div>
 
-          {/* VALUES STRIP */}
           <div className="text-muted font-body leading-[1.8] select-none cursor-default">
             <p>
               I value simplicity over hype, correctness over shortcuts, and

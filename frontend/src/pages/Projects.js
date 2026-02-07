@@ -1,15 +1,16 @@
 import { motion } from "framer-motion";
 import Layout from "../components/Layout";
 import PageWrapper from "../components/PageWrapper";
+import ProjectCard from "../components/ProjectCard";
 
 function Projects() {
   const projects = [
     {
-      title: "Ecommerce Website",
+      title: "TheIndiArt",
       description:
-        "A full-stack ecommerce platform with product listings, cart flow, order management, and scalable backend architecture.",
+        "A fully developed end-to-end e-commerce platform for handmade artistry, focusing on secure auth, efficient APIs, a user-friendly UI, and a dependable backend.",
       tech: "React, Tailwind CSS, Node.js, MongoDB",
-      github: "#",
+      github: "https://github.com/siddharthriot/theindiart",
       live: "#",
     },
     {
@@ -17,7 +18,7 @@ function Projects() {
       description:
         "A civic-tech platform designed to report, track, and visualize public issues, improving transparency and citizen engagement.",
       tech: "React, Node.js, MongoDB, Maps API",
-      github: "#",
+      github: "https://github.com/siddharthriot/civiceye",
       live: "#",
     },
     {
@@ -25,15 +26,15 @@ function Projects() {
       description:
         "A safety-focused application with intelligent threat detection and real-time alerts.",
       tech: "React, Node.js, AI/ML",
-      github: "#",
+      github: "https://github.com/siddharthriot/women-safety-app",
       live: "#",
     },
     {
-      title: "My Portfolio",
+      title: "Portfolio",
       description:
         "A dark, motion-first portfolio designed with typography, animation, and system thinking.",
       tech: "React, Tailwind, Framer Motion",
-      github: "#",
+      github: "https://github.com/siddharthriot/portfolio",
       live: "#",
     },
   ];
@@ -54,43 +55,7 @@ function Projects() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {projects.map((project, i) => (
-              <motion.div
-                key={i}
-                className="border border-white/5 rounded-xl p-6 bg-bg select-none cursor-default"
-                whileHover={{ y: -6 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-              >
-                <h2 className="text-xl font-semibold mb-3">
-                  {project.title}
-                </h2>
-
-                <p className="text-muted font-body leading-[1.75] mb-5">
-                  {project.description}
-                </p>
-
-                <p className="text-sm text-muted font-body mb-6">
-                  <span className="text-text">Tech:</span> {project.tech}
-                </p>
-
-                <div className="flex gap-6 text-sm font-body">
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-accent transition cursor-pointer"
-                  >
-                    GitHub →
-                  </a>
-                  <a
-                    href={project.live}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-accent transition cursor-pointer"
-                  >
-                    Live →
-                  </a>
-                </div>
-              </motion.div>
+              <ProjectCard key={i} project={project} />
             ))}
           </div>
         </motion.div>
