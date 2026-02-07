@@ -35,7 +35,7 @@ function Projects() {
         "A dark, motion-first portfolio designed with typography, animation, and system thinking.",
       tech: "React, Tailwind, Framer Motion",
       github: "https://github.com/siddharthriot/portfolio",
-      live: "#",
+      live: "https://siddharthriot-portfolio.vercel.app/",
     },
   ];
 
