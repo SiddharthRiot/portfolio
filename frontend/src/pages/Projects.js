@@ -26,7 +26,7 @@ function Projects() {
       description:
         "A safety-focused application with intelligent threat detection and real-time alerts.",
       tech: "React, Node.js, AI/ML",
-      github: "https://github.com/siddharthriot/women-safety-app",
+      github: "https://github.com/SiddharthRiot/WomenSafetyApp",
       live: "#",
     },
     {
